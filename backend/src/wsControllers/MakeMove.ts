@@ -8,10 +8,17 @@ const MakeMove = (
   wss: WebSocketServer
 ) => {
   const move = messageJson.body?.move;
+
+  // If the move is invalid we will return here only
   if (Game1.Board[move![0]][move![1]] !== null) {
     Socket.send("Invalid Move");
+    return;
   }
+
+  // If the move is valid we will make the move
   Game1.Board[move![0]][move![1]] = Game1.turn;
+
+  // We check for the win condition
   const result: WinResult = CheckForWin(Game1.Board);
   if (result === "O" || result === "X") {
     console.log(`The Winner is ${result}`);
@@ -19,9 +26,13 @@ const MakeMove = (
       client.send(`The Winner is ${result}`);
     });
   }
+
+  // Broadcast the move to everyone
   wss.clients.forEach((client) => {
     client.send(JSON.stringify(Game1.Board));
   });
+
+  // Log the move in the server
   if (Socket === Game1.Player1?.socket && Game1.turn === "O") {
     console.log("Player 1 / O has completed their turn");
     console.log(move);

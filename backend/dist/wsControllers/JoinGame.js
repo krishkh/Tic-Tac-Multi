@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const __1 = require("..");
 const JoinUser = (messageJson, Socket) => {
     var _a, _b, _c;
-    console.log("Someone is Joining the Game");
     const PName = (_a = messageJson.body) === null || _a === void 0 ? void 0 : _a.name;
+    console.log(`${PName} is Joining the Game`);
     if (!__1.Game1.Player1 && Socket != ((_b = __1.Game1.Player2) === null || _b === void 0 ? void 0 : _b.socket)) {
         __1.Game1.Player1 = { name: PName, id: 1, socket: Socket };
     }
