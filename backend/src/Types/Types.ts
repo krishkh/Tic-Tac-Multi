@@ -19,5 +19,5 @@ export type GameCollection = Set<Game>;
 export interface MessageType {
   type: string;
   action?: string;
-  body?: string;
+  body?: string | { move: [number, number] } | { name: string };
 }
