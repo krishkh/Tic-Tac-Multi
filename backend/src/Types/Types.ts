@@ -5,6 +5,7 @@ export interface Player {
   id: number;
   socket: WebSocket;
 }
+
 export type Inputs = null | "X" | "O";
 export type GameBoard = Inputs[][];
 export interface Game {
@@ -18,6 +19,5 @@ export interface Game {
 export type GameCollection = Set<Game>;
 export interface MessageType {
   type: string;
-  action?: string;
-  body?: string | { move: [number, number] } | { name: string };
+  body?: { message?: string; move?: [number, number]; name?: string };
 }

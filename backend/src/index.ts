@@ -1,6 +1,6 @@
 import express from "express";
 import ws from "ws";
-import { Game, GameCollection } from "./Types/Types";
+import { Game } from "./Types/Types";
 import { handleConnection } from "./wsHandlers/handleConnection";
 
 // let Players: GameCollection = new Set();
