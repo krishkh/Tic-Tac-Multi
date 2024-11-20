@@ -21,3 +21,4 @@ export interface MessageType {
   type: string;
   body?: { message?: string; move?: [number, number]; name?: string };
 }
+export type WinResult = null | "X" | "O" | false;

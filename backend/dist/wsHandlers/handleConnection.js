@@ -1,35 +1,23 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleConnection = void 0;
-const __1 = require("..");
-const WinCheck_1 = require("../controllers/WinCheck");
+const JoinGame_1 = __importDefault(require("../wsControllers/JoinGame"));
+const CheckGameState_1 = __importDefault(require("../wsControllers/CheckGameState"));
+const MakeMove_1 = __importDefault(require("../wsControllers/MakeMove"));
 const handleConnection = (Socket, wss) => {
     Socket.on("message", (message) => {
-        var _a, _b;
         const messageJson = JSON.parse(message.toString());
         if (messageJson.type === "joinGame") {
-            console.log(Socket, "Joining Game");
-            const PName = (_a = messageJson.body) === null || _a === void 0 ? void 0 : _a.name;
-            if (!__1.Game1.Player1) {
-                __1.Game1.Player1 = { name: PName, id: 1, socket: Socket };
-            }
-            else if (!__1.Game1.Player2) {
-                __1.Game1.Player2 = { name: PName, id: 2, socket: Socket };
-            }
-            else {
-                Socket.send("Game is filled already");
-            }
+            (0, JoinGame_1.default)(messageJson, Socket);
         }
         else if (messageJson.type === "check") {
-            // We are just checking the state of the Game here not the board
-            Socket.send(JSON.stringify(__1.Game1));
+            (0, CheckGameState_1.default)(Socket);
         }
         else if (messageJson.type === "move") {
-            const body = (_b = messageJson.body) === null || _b === void 0 ? void 0 : _b.move;
-            // The body here should have a move: field with input in the form of [x, y]
-            // check for win function
-            (0, WinCheck_1.CheckForWin)(__1.Game1.Board);
-            __1.Game1.turn = __1.Game1.turn == "O" ? (__1.Game1.turn = "X") : (__1.Game1.turn = "O");
+            (0, MakeMove_1.default)(Socket, messageJson, wss);
         }
         else if (messageJson.type) {
             Socket.send("bruh wrong input");
